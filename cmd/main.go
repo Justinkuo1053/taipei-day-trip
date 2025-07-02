@@ -35,7 +35,7 @@ func main() {
 	// 初始化路由
 	r := gin.Default()
 	// 設定路由
-	r.GET("/attractions", attractionHandler.GetAttractions)
+	handlers.RegisterRoutes(r, attractionHandler)
 	// r.GET("/attractions/:id", attractionHandler.GetAttractionByID) // 暫時註解
 	// r.POST("/orders", orderHandler.CreateOrder)                    // 暫時註解
 

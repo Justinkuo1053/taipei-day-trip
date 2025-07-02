@@ -29,3 +29,13 @@ func (h *AttractionHandler) GetAttractions(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": attractions})
 }
+
+// GetMRTs 取得所有捷運站名稱及景點數量，依數量排序
+func (h *AttractionHandler) GetMRTs(c *gin.Context) {
+	mrts, err := h.Service.GetMRTsWithAttractionCount()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "無法取得捷運站資料"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": mrts})
+}
