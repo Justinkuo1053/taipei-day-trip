@@ -1,11 +1,52 @@
 package main
 
 import (
-    "log"
-    "net/http"
+	"log"
+	"os"
+	"taipei-day-trip-go-go/internal/handlers"
+	"taipei-day-trip-go-go/internal/repositories"
+	"taipei-day-trip-go-go/internal/services"
+	"taipei-day-trip-go-go/internal/utils"
+
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-    log.Println("Starting server...")
-    http.ListenAndServe(":8080", nil)
+	// 載入 .env
+	if err := godotenv.Load(); err != nil {
+		log.Println(".env 載入失敗，將使用系統環境變數")
+	}
+
+	// 初始化資料庫
+	if err := utils.InitDB(); err != nil {
+		log.Fatalf("資料庫初始化失敗: %v", err)
+	}
+
+	// 初始化 Repository
+	attractionRepo := repositories.NewAttractionRepository(utils.Database)
+
+	// 初始化 Service
+	attractionService := services.NewAttractionService(attractionRepo)
+
+	// 初始化 Handler
+	attractionHandler := handlers.NewAttractionHandler(attractionService)
+
+	// 初始化路由
+	r := gin.Default()
+	// 設定路由
+	r.GET("/attractions", attractionHandler.GetAttractions)
+	// r.GET("/attractions/:id", attractionHandler.GetAttractionByID) // 暫時註解
+	// r.POST("/orders", orderHandler.CreateOrder)                    // 暫時註解
+
+	// 印出環境變數方便 debug
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+	dbUser := os.Getenv("DB_USER")
+	dbName := os.Getenv("DB_NAME")
+	caCertPath := os.Getenv("DB_SSL_CA")
+	log.Printf("DB_HOST=%s, DB_PORT=%s, DB_USER=%s, DB_NAME=%s, CA=%s", dbHost, dbPort, dbUser, dbName, caCertPath)
+
+	// 啟動伺服器
+	r.Run(":8080")
 }

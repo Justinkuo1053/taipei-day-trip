@@ -2,8 +2,8 @@ package services
 
 import (
 	"fmt"
-	"taipei-day-trip/internal/models"
-	"taipei-day-trip/internal/repository/interfaces" // 保留 interfaces 匯入
+	"taipei-day-trip-go-go/internal/interfaces"
+	"taipei-day-trip-go-go/internal/models"
 )
 
 type attractionService struct {
