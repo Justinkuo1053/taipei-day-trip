@@ -50,8 +50,14 @@ func (r *AttractionRepository) Search(keyword string) ([]models.Attraction, erro
 }
 
 // GetMRTsWithAttractionCount 取得所有捷運站名稱及其景點數量，並依數量排序
-func (r *AttractionRepository) GetMRTsWithAttractionCount() ([]struct{ MRT string; Count int }, error) {
-	var results []struct{ MRT string; Count int }
+func (r *AttractionRepository) GetMRTsWithAttractionCount() ([]struct {
+	MRT   string
+	Count int
+}, error) {
+	var results []struct {
+		MRT   string
+		Count int
+	}
 	// group by mrt, count attractions, order by count desc
 	err := r.DB.Model(&models.Attraction{}).
 		Select("mrt, COUNT(*) as count").
