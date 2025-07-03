@@ -23,9 +23,20 @@ func (r *AttractionRepository) GetAllAttractions() ([]models.Attraction, error) 
 }
 
 func (r *AttractionRepository) GetByID(id uint) (*models.Attraction, error) {
-	// TODO: implement
-	var attraction *models.Attraction
-	return attraction, nil
+	var attraction models.Attraction
+	if err := r.DB.First(&attraction, id).Error; err != nil {
+		return nil, err
+	}
+	// 查詢 images
+	var images []models.Image
+	// 查詢景點時，會額外查詢 images 資料表，取得該景點所有圖片網址，組成 imageURLs 陣列，並賦值給 Attraction.Images
+	r.DB.Where("attraction_id = ?", id).Find(&images)
+	imageURLs := make([]string, 0, len(images))
+	for _, img := range images {
+		imageURLs = append(imageURLs, img.URL)
+	}
+	attraction.Images = imageURLs
+	return &attraction, nil
 }
 
 func (r *AttractionRepository) CreateAttraction(attraction *models.Attraction) error {

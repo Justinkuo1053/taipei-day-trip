@@ -13,6 +13,7 @@ type Attraction struct {
 	MRT         string `gorm:"size:255"`
 	Lat         float64
 	Lng         float64
+	Images      []string `gorm:"-" json:"images"` // API 回傳用，不存 DB
 }
 
 type Image struct {

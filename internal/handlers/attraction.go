@@ -2,6 +2,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"taipei-day-trip-go-go/internal/interfaces"
 
@@ -38,4 +39,28 @@ func (h *AttractionHandler) GetMRTs(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": mrts})
+}
+
+// 依 ID 取得景點
+func (h *AttractionHandler) GetAttractionByID(c *gin.Context) {
+	idParam := c.Param("id")
+	if idParam == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": true, "message": "請提供景點 id"})
+		return
+	}
+	var id int
+	if _, err := fmt.Sscanf(idParam, "%d", &id); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": true, "message": "景點 id 格式錯誤"})
+		return
+	}
+	attraction, err := h.Service.GetAttractionByID(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": true, "message": "請查詢後端提供的錯誤訊息"})
+		return
+	}
+	if attraction == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": true, "message": "請提供正確的景點編號"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": attraction})
 }
