@@ -25,17 +25,20 @@ func main() {
 
 	// 初始化 Repository
 	attractionRepo := repositories.NewAttractionRepository(utils.Database)
+	bookingRepo := repositories.BookingRepository{DB: utils.Database}
 
 	// 初始化 Service
 	attractionService := services.NewAttractionService(attractionRepo)
+	bookingService := services.NewBookingService(&bookingRepo)
 
 	// 初始化 Handler
 	attractionHandler := handlers.NewAttractionHandler(attractionService)
+	bookingHandler := handlers.NewBookingHandler(bookingService)
 
 	// 初始化路由
 	r := gin.Default()
 	// 設定路由
-	handlers.RegisterRoutes(r, attractionHandler)
+	handlers.RegisterRoutes(r, attractionHandler, bookingHandler)
 	// r.GET("/attractions/:id", attractionHandler.GetAttractionByID) // 暫時註解
 	// r.POST("/orders", orderHandler.CreateOrder)                    // 暫時註解
 
