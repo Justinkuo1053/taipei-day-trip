@@ -26,19 +26,23 @@ func main() {
 	// 初始化 Repository
 	attractionRepo := repositories.NewAttractionRepository(utils.Database)
 	bookingRepo := repositories.BookingRepository{DB: utils.Database}
+	userRepo := repositories.NewUserRepository(utils.Database)
 
 	// 初始化 Service
 	attractionService := services.NewAttractionService(attractionRepo)
 	bookingService := services.NewBookingService(&bookingRepo)
+	jwtSecret := os.Getenv("JWT_SECRET")
+	userService := services.NewUserService(userRepo, jwtSecret)
 
 	// 初始化 Handler
 	attractionHandler := handlers.NewAttractionHandler(attractionService)
 	bookingHandler := handlers.NewBookingHandler(bookingService)
+	userHandler := handlers.NewUserHandler(userService)
 
 	// 初始化路由
 	r := gin.Default()
 	// 設定路由
-	handlers.RegisterRoutes(r, attractionHandler, bookingHandler)
+	handlers.RegisterRoutes(r, attractionHandler, bookingHandler, userHandler, userService)
 	// r.GET("/attractions/:id", attractionHandler.GetAttractionByID) // 暫時註解
 	// r.POST("/orders", orderHandler.CreateOrder)                    // 暫時註解
 
