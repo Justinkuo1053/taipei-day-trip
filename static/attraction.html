@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attraction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/overall.css" />
+    <link rel="stylesheet" href="/static/css/attraction.css" />
+    <script defer type="module" src="/static/app/user.js"></script>
+    <script defer type="module" src="/static/app/attraction.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="header__nav">
+        <h2 class="header__title">台北一日遊</h2>
+        <div class="header__page">
+          <button class="header__btn header__btn--booking">預定行程</button>
+          <button class="header__btn header__btn--user">登入/註冊</button>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="profile">
+        <div class="profile__image-box--outer">
+          <div class="profile__image-box">
+            <img
+              class="profile__arrow-btn profile__arrow-btn--left"
+              src="/static/images/btn_leftArrow.png"
+              alt="左箭頭"
+              id="left"
+            />
+            <!-- <img
+              class="attraction"
+              src="./images/麥可.jpg"
+              alt="景點圖片"
+              style="z-index: auto; display: none"
+            /> -->
+            <img
+              class="profile__arrow-btn profile__arrow-btn--right"
+              src="/static/images/btn_rightArrow.png"
+              alt="右箭頭"
+              id="right"
+            />
+            <div class="profile__imgNo">
+              <!-- <label class="profile__imgNo--box ">
+                <input type="radio" class="profile__imgNo--input" name="imgNo" checked id=${i} />
+                <div class="circle" ></div>
+              </label>; -->
+            </div>
+          </div>
+        </div>
+        <div class="profile__content">
+          <h3 class="profile__content--name bold"></h3>
+          <div class="profile__content--cat-mrt body-med">
+            <span class="profile__content--cat"></span>
+
+            <span class="profile__content--mrt"></span>
+          </div>
+          <div class="profile__content--form">
+            <p class="form__title body-bold">訂購導覽行程</p>
+            <p class="form__title form__title--slogan body-med">
+              以此景點為中心的一日行程，帶您探索城市角落故事
+            </p>
+            <div class="form__option form__option--date">
+              <div class="form__option--date body-bold">選擇日期：</div>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                class="body-med"
+                required="required"
+              />
+            </div>
+            <div class="form__alert">
+              <img
+                src="/static/images/circle-exclamation-solid.svg"
+                alt="alert"
+              />
+              請選擇日期！
+            </div>
+            <div class="form__option form__option--time">
+              <div class="form__option--time body-bold">選擇時間：</div>
+              <label for="morning">
+                <input
+                  type="radio"
+                  id="morning"
+                  name="time"
+                  value="morning"
+                  checked
+                />
+                <div class="radio-btn"></div>
+                <span>上半天</span>
+              </label>
+              <label for="afternoon">
+                <input
+                  type="radio"
+                  id="afternoon"
+                  name="time"
+                  value="afternoon"
+                />
+                <div class="radio-btn"></div>
+                <span>下半天</span>
+              </label>
+            </div>
+            <div class="form__option form__option--cost">
+              <div class="form__option--cost-title body-bold">導覽費用：</div>
+              <div class="form__option--cost-price">
+                <span>新台幣&nbsp</span>
+                <span id="price">2000</span>
+                <span>&nbsp元</span>
+              </div>
+            </div>
+            <button class="form__btn regular">開始預約行程</button>
+          </div>
+        </div>
+      </section>
+      <div class="separator"></div>
+      <section class="info">
+        <p class="info__description content-reg"></p>
+        <div class="info__title body-bold">景點地址：</div>
+        <p class="info__address content-reg"></p>
+        <div class="info__title body-bold">交通方式：</div>
+        <p class="info__traffic content-reg"></p>
+      </section>
+    </main>
+    <footer>
+      <p class="body-bold">COPYRIGHT © 2021 台北一日遊</p>
+    </footer>
+  </body>
+</html>

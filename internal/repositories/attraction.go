@@ -51,6 +51,16 @@ func (r *AttractionRepository) GetAll(page, limit int) ([]models.Attraction, err
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	// 針對每個景點查詢 images，組成 Images 陣列
+	for i := range attractions {
+		var images []models.Image
+		r.DB.Where("attraction_id = ?", attractions[i].ID).Find(&images)
+		imageURLs := make([]string, 0, len(images))
+		for _, img := range images {
+			imageURLs = append(imageURLs, img.URL)
+		}
+		attractions[i].Images = imageURLs
+	}
 	return attractions, nil
 }
 

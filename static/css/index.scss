@@ -1,0 +1,241 @@
+$PrimaryColor: #448899;
+$SecondaryColor: #666666;
+
+body {
+  .hero {
+    width: 100%;
+    height: 320px;
+    background-image: url(../images/[orig]\ welcome\ image.png);
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__content-box {
+      width: 1200px;
+      height: 169px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    &__slogan {
+      width: 100%;
+      height: 78px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      h1 {
+        padding: 10px 0px;
+        height: 41px;
+        color: #f8f8f8;
+        text-shadow: 1px 1px 2px #666666;
+      }
+      p {
+        padding: 5px 0px;
+        text-shadow: 1px 1px 2px #666666;
+        color: #f8f8f8;
+      }
+    }
+    &__search {
+      display: flex;
+      width: 100%;
+      height: 46px;
+      input {
+        box-shadow: 0 0 5px 0 $SecondaryColor inset;
+        width: 400px;
+        height: 100%;
+        border-radius: 5px 0 0 5px;
+        position: relative;
+      }
+      button {
+        .btn {
+          &__background {
+            width: 60px;
+            height: 100%;
+            background-color: $PrimaryColor;
+            position: relative;
+            border-radius: 0 5px 5px 0;
+          }
+          &__icon {
+            position: absolute;
+            top: 8px;
+            left: 15px;
+          }
+        }
+      }
+    }
+  }
+  main {
+    min-height: calc(100vh - 578px);
+    width: 100%;
+    margin: 50px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .mrt-bar {
+      padding: 0 0 20px 0;
+      max-width: 1200px;
+      width: 100%;
+      height: 70px;
+      display: flex;
+      position: relative;
+      &__arrow {
+        width: 47px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+
+        img {
+          width: 32px;
+          height: 32px;
+          opacity: 0.5;
+          &:hover {
+            opacity: 1;
+
+            cursor: pointer;
+          }
+        }
+        &--left {
+          justify-content: end;
+        }
+        &--right {
+          justify-content: start;
+        }
+      }
+
+      &__container {
+        padding: 0px 10px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        overflow-x: scroll;
+        scroll-behavior: smooth;
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        .mrt {
+          padding: 5px 15px;
+          white-space: nowrap;
+          color: $SecondaryColor;
+          &:hover {
+            color: black;
+            cursor: pointer;
+            text-shadow: 0.5px 0.5px 0.5px #666666;
+          }
+        }
+      }
+    }
+    .attraction {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      &__cover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        // border: 2px solid black;
+      }
+      &__box {
+        &--outer {
+          height: 272px;
+          display: flex;
+          flex: 1 0 25%;
+          max-width: 25%;
+        }
+        width: 100%;
+        margin: 15px;
+        border-radius: 5px;
+        border: 1px solid #e8e8e8;
+        position: relative;
+        z-index: 0;
+
+        &:hover {
+          transition: 0.2s ease-out;
+          box-shadow: 0 1px 20px 0 $SecondaryColor;
+          cursor: pointer;
+        }
+      }
+      &__img {
+        width: 100%;
+        height: 197px;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 5px 5px 0 0;
+        }
+      }
+      &__name {
+        position: absolute;
+        background-color: #000000;
+        z-index: 1;
+        opacity: 0.6;
+        bottom: 43px;
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        color: #ffffff;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      &__info {
+        z-index: 0;
+        width: 100%;
+        height: 45px;
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        color: $SecondaryColor;
+      }
+    }
+  }
+}
+@media screen and (max-width: 1199px) {
+  .hero {
+    padding: 10px;
+  }
+  main {
+    .attraction {
+      &__box--outer {
+        flex: 1 0 50%;
+        max-width: 50%;
+        height: 375px;
+      }
+      &__img {
+        height: 300px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  body {
+    .hero__search {
+      input {
+        width: 225px;
+      }
+    }
+    main {
+      .attraction {
+        width: 97.77777%;
+        &__box--outer {
+          flex: 1 0 100%;
+          max-width: 100%;
+          height: 310px;
+        }
+        &__img {
+          height: 235px;
+        }
+      }
+    }
+  }
+}

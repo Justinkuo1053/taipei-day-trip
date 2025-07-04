@@ -1,0 +1,221 @@
+$PrimaryColor: #448899;
+$SecondaryColor: #666666;
+
+body {
+  .welcome {
+    width: 100%;
+    margin-top: 40px;
+    min-height: 27px;
+    color: $SecondaryColor;
+    display: flex;
+    justify-content: center;
+
+    &__container {
+      width: 100%;
+      max-width: 1020px;
+      padding: 0 10px;
+      &--noBooking {
+        max-width: 1000px;
+      }
+    }
+  }
+  .empty {
+    margin: 30px 0 40px 0;
+    width: 100%;
+    display: none;
+    justify-content: center;
+
+    &__state {
+      width: 100%;
+      max-width: 1000px;
+      padding: 0 10px;
+      line-height: 24px;
+      color: $SecondaryColor;
+    }
+  }
+  main {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px;
+    // visibility: hidden;
+    .booking {
+      width: 100%;
+      max-width: 1000px;
+      &__profile {
+        width: 100%;
+        max-width: 980px;
+        height: auto;
+        padding-left: 10px;
+        display: flex;
+        gap: 30px;
+
+        &--img-container {
+          width: 250px;
+          height: 200px;
+        }
+        &--img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        &--infor {
+          flex-grow: 1;
+          position: relative;
+          height: 200px;
+          .infor {
+            &__title {
+              color: $PrimaryColor;
+            }
+          }
+        }
+        &--title {
+          color: $PrimaryColor;
+          line-height: 24px;
+          margin-bottom: 20px;
+        }
+        &--content {
+          color: $SecondaryColor;
+          line-height: 24px;
+          margin-bottom: 10px;
+        }
+        .infor__data {
+          margin-left: 5px;
+          font-weight: 400;
+        }
+      }
+      &__delete-icon {
+        position: absolute;
+        top: 0;
+        right: 0;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .form {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .contact {
+      width: 100%;
+      max-width: 980px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      &__title {
+        color: $SecondaryColor;
+        line-height: 24px;
+        margin-bottom: 20px;
+      }
+      &__input {
+        margin-bottom: 15px;
+        &--subtitle {
+          color: $SecondaryColor;
+          font-weight: 400;
+        }
+        input {
+          width: 200px;
+          height: 38px;
+          padding: 10px;
+          border: 1px solid #e8e8e8;
+          border-radius: 5px;
+        }
+      }
+      &__notice {
+        width: 100%;
+        color: $SecondaryColor;
+        line-height: 24px;
+      }
+    }
+    .payment {
+      width: 100%;
+      max-width: 980px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+      &__title {
+        width: 100%;
+        height: 24px;
+        color: $SecondaryColor;
+        margin-bottom: 5px;
+      }
+      &__input {
+        display: flex;
+        align-items: center;
+        &--subtitle {
+          color: $SecondaryColor;
+          font-weight: 400;
+        }
+        div.tpfield {
+          width: 200px;
+          height: 38px;
+          padding: 10px;
+          border: 1px solid #e8e8e8;
+          border-radius: 5px;
+        }
+      }
+    }
+    .confirm {
+      width: 100%;
+      max-width: 980px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+      margin-bottom: 40px;
+      &__total {
+        line-height: 20px;
+        color: $SecondaryColor;
+        margin-bottom: 22px;
+      }
+      &__btn {
+        width: 173px;
+        height: 36px;
+        margin-bottom: 22px;
+        background-color: #448899;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+      }
+      &__error {
+        display: none;
+        width: 173px;
+        line-height: 10px;
+        margin-bottom: 11px;
+        background-color: #ffbd9b;
+        color: black;
+        padding: 10px 20px;
+        border-radius: 5px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  body {
+    main {
+      .booking {
+        &__profile {
+          flex-direction: column;
+          padding-left: 0;
+          &--img-container {
+            width: 100%;
+          }
+        }
+        &__delete-icon {
+          top: auto;
+          bottom: 0;
+        }
+      }
+      .separator-top {
+        margin-top: 30px;
+      }
+    }
+  }
+}
