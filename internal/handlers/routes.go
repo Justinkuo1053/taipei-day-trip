@@ -10,7 +10,7 @@ import (
 func RegisterRoutes(r *gin.Engine, attractionHandler *AttractionHandler, bookingHandler *BookingHandler, userHandler *UserHandler, userService *services.UserService) {
 	r.GET("/api/attractions", attractionHandler.GetAttractions)
 	r.GET("/api/mrts", attractionHandler.GetMRTs)
-	r.GET("/api/attractions/:id", attractionHandler.GetAttractionByID)
+	r.GET("/api/attraction/:id", attractionHandler.GetAttractionByID)
 
 	r.GET("/api/booking", bookingHandler.GetBooking)
 	r.POST("/api/booking", bookingHandler.CreateBooking)

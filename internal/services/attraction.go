@@ -35,10 +35,13 @@ func (s *attractionService) SearchAttractions(keyword string) ([]models.Attracti
 	}
 	return attractions, nil
 }
-
-func (s *attractionService) GetMRTsWithAttractionCount() ([]struct {
-	MRT   string
-	Count int
-}, error) {
-	return s.repo.GetMRTsWithAttractionCount()
+func (s *attractionService) GetMRTNames() ([]string, error) {
+	return s.repo.GetMRTNames()
 }
+
+// func (s *attractionService) GetMRTsWithAttractionCount() ([]struct {
+// 	MRT   string
+// 	Count int
+// }, error) {
+// 	return s.repo.GetMRTsWithAttractionCount()
+// }

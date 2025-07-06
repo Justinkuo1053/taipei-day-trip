@@ -70,24 +70,40 @@ func (r *AttractionRepository) Search(keyword string) ([]models.Attraction, erro
 	return attractions, nil
 }
 
-// GetMRTsWithAttractionCount 取得所有捷運站名稱及其景點數量，並依數量排序
-func (r *AttractionRepository) GetMRTsWithAttractionCount() ([]struct {
-	MRT   string
-	Count int
-}, error) {
-	var results []struct {
-		MRT   string
-		Count int
-	}
+// GetMRTNames 取得所有捷運站名稱
+func (r *AttractionRepository) GetMRTNames() ([]string, error) {
+	var results []string
 	// group by mrt, count attractions, order by count desc
 	err := r.DB.Model(&models.Attraction{}).
-		Select("mrt, COUNT(*) as count").
+		Select("mrt").
 		Where("mrt != ''"). // 避免空白捷運站
 		Group("mrt").
-		Order("count DESC").
+		Order("COUNT(*) DESC").
 		Scan(&results).Error
 	if err != nil {
 		return nil, err
 	}
 	return results, nil
 }
+
+// // GetMRTsWithAttractionCount 取得所有捷運站名稱及其景點數量，並依數量排序
+// func (r *AttractionRepository) GetMRTsWithAttractionCount() ([]struct {
+// 	MRT   string
+// 	Count int
+// }, error) {
+// 	var results []struct {
+// 		MRT   string
+// 		Count int
+// 	}
+// 	// group by mrt, count attractions, order by count desc
+// 	err := r.DB.Model(&models.Attraction{}).
+// 		Select("mrt, COUNT(*) as count").
+// 		Where("mrt != ''"). // 避免空白捷運站
+// 		Group("mrt").
+// 		Order("count DESC").
+// 		Scan(&results).Error
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return results, nil
+// }
