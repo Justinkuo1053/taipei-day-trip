@@ -20,10 +20,56 @@ type Order struct {
 	Booking Booking `json:"booking" gorm:"foreignKey:BookingID"`
 }
 
-type OrderInput struct {
-	// 定義欄位
+type AttractionInfo struct {
+	ID      int    `json:"id"`
+	Name    string `json:"name"`
+	Address string `json:"address"`
+	Image   string `json:"image"`
 }
 
-type PaymentInput struct {
-	// 定義欄位
+type TripInfo struct {
+	Attraction AttractionInfo `json:"attraction"`
+	Date       string         `json:"date"`
+	Time       string         `json:"time"`
+}
+
+type ContactInfo struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+	Phone string `json:"phone"`
+}
+
+type OrderInput struct {
+	Prime string `json:"prime"`
+	Order struct {
+		Price   int         `json:"price"`
+		Trip    TripInfo    `json:"trip"`
+		Contact ContactInfo `json:"contact"`
+	} `json:"order"`
+}
+
+type PaymentResult struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
+
+type OrderCreateResponse struct {
+	Data *struct {
+		Number  string        `json:"number"`
+		Payment PaymentResult `json:"payment"`
+	} `json:"data,omitempty"`
+	Error   bool   `json:"error,omitempty"`
+	Message string `json:"message,omitempty"`
+}
+
+type OrderDetailResponse struct {
+	Data *struct {
+		Number  string      `json:"number"`
+		Price   int         `json:"price"`
+		Trip    TripInfo    `json:"trip"`
+		Contact ContactInfo `json:"contact"`
+		Status  int         `json:"status"`
+	} `json:"data,omitempty"`
+	Error   bool   `json:"error,omitempty"`
+	Message string `json:"message,omitempty"`
 }
