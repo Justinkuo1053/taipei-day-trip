@@ -64,3 +64,19 @@ func (h *AttractionHandler) GetAttractionByID(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": attraction})
 }
+
+// SearchAttractionsByKeyword 處理全文搜尋 API
+// @route GET /api/attractions/search?keyword=xxx
+func (h *AttractionHandler) SearchAttractionsByKeyword(c *gin.Context) {
+	keyword := c.Query("keyword")
+	if keyword == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": true, "message": "請提供搜尋關鍵字"})
+		return
+	}
+	attractions, err := h.Service.SearchAttractionsByKeyword(keyword)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": true, "message": "搜尋失敗"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": attractions})
+}

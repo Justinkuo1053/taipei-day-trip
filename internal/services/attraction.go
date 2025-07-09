@@ -45,3 +45,9 @@ func (s *attractionService) GetMRTNames() ([]string, error) {
 // }, error) {
 // 	return s.repo.GetMRTsWithAttractionCount()
 // }
+
+// SearchAttractionsByKeyword 依關鍵字搜尋景點
+func (s *attractionService) SearchAttractionsByKeyword(keyword string) ([]models.Attraction, error) {
+	// 呼叫 repository 層的全文搜尋方法
+	return s.repo.SearchAttractionsByKeyword(keyword)
+}

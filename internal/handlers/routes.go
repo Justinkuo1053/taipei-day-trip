@@ -11,6 +11,7 @@ func RegisterRoutes(r *gin.Engine, attractionHandler *AttractionHandler, booking
 	r.GET("/api/attractions", attractionHandler.GetAttractions)
 	r.GET("/api/mrts", attractionHandler.GetMRTs)
 	r.GET("/api/attraction/:id", attractionHandler.GetAttractionByID)
+	r.GET("/api/attractions/search", attractionHandler.SearchAttractionsByKeyword) // 新增全文搜尋 API 路由
 
 	r.GET("/api/booking", bookingHandler.GetBooking)
 	r.POST("/api/booking", bookingHandler.CreateBooking)

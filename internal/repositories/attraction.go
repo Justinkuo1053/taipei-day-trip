@@ -107,3 +107,30 @@ func (r *AttractionRepository) GetMRTNames() ([]string, error) {
 // 	}
 // 	return results, nil
 // }
+
+// SearchAttractionsByKeyword 使用 LIKE 模糊查詢，解決中文全文搜尋問題
+// keyword: 使用者輸入的關鍵字，可以是景點名稱、捷運站名稱、描述等
+// 回傳符合條件的景點陣列
+func (r *AttractionRepository) SearchAttractionsByKeyword(keyword string) ([]models.Attraction, error) {
+	var attractions []models.Attraction
+	// 改用 LIKE 查詢，支援中文子字串模糊搜尋
+	likePattern := "%" + keyword + "%"
+	result := r.DB.Raw(`
+		SELECT * FROM attractions
+		WHERE name LIKE ? OR description LIKE ? OR mrt LIKE ?
+	`, likePattern, likePattern, likePattern).Scan(&attractions)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	// 查詢每個景點的圖片，組成 Images 陣列
+	for i := range attractions {
+		var images []models.Image
+		r.DB.Where("attraction_id = ?", attractions[i].ID).Find(&images)
+		imageURLs := make([]string, 0, len(images))
+		for _, img := range images {
+			imageURLs = append(imageURLs, img.URL)
+		}
+		attractions[i].Images = imageURLs
+	}
+	return attractions, nil
+}

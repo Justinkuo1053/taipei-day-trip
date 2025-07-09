@@ -7,6 +7,7 @@ type AttractionRepository interface {
 	GetAll(page, limit int) ([]models.Attraction, error)
 	Search(keyword string) ([]models.Attraction, error)
 	GetMRTNames() ([]string, error)
+	SearchAttractionsByKeyword(keyword string) ([]models.Attraction, error)
 	// GetMRTsWithAttractionCount() ([]struct {
 	// 	MRT   string
 	// 	Count int
@@ -22,4 +23,6 @@ type AttractionService interface {
 	// 	MRT   string
 	// 	Count int
 	// }, error)
+	// SearchAttractionsByKeyword 依關鍵字搜尋景點
+	SearchAttractionsByKeyword(keyword string) ([]models.Attraction, error)
 }

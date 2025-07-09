@@ -13,7 +13,8 @@ const option = {
   threshold: 0.0,
 };
 async function callback(entries) {
-  if (entries[0].isIntersecting && nextPage != null) {
+  // 修正：只有在沒有 keyword（即一般列表）時才啟用分頁滾動
+  if (entries[0].isIntersecting && nextPage != null && (!keyword || keyword.trim() === "")) {
     observer.unobserve(entries[0].target);
     await renderAttraction(nextPage, keyword);
     observer.observe(entries[0].target);
@@ -27,10 +28,10 @@ observer.observe(footer);
 // --------------------keyword search--------------------
 
 let searchBtn = document.querySelector("button.keyword-search");
-searchBtn.addEventListener("click", (e) => {
+searchBtn.addEventListener("click", async (e) => {
   keyword = document.querySelector("input#attraction").value;
   attractionSection.innerHTML = "";
-  renderAttraction(0, keyword);
+  await renderAttraction(0, keyword);
 });
 
 // --------------------mrt horizontal scroll bar--------------------
@@ -50,13 +51,19 @@ searchKeywordByMRT();
 // --------------------function part--------------------
 
 async function renderAttraction(page = 0, keyword = "") {
-  url = "/api/attractions?page=" + page;
-  if (keyword != "") {
-    url += "&keyword=" + keyword;
+  let url;
+  if (keyword && keyword.trim() !== "") {
+    // 有關鍵字時，呼叫全文搜尋 API，且不分頁
+    url = `/api/attractions/search?keyword=${encodeURIComponent(keyword)}`;
+  } else {
+    // 沒有關鍵字時，呼叫一般列表 API
+    url = `/api/attractions?page=${page}`;
   }
   let response = await fetch(url, { method: "GET" });
   let data = await response.json();
-  nextPage = data.nextPage;
+  // 搜尋時不分頁，nextPage 設為 null
+  nextPage = (keyword && keyword.trim() !== "") ? null : data.nextPage;
+  attractionSection.innerHTML = ""; // 每次渲染前清空
   for (let i = 0; i < data.data.length; i++) {
     let mrt;
     data.data[i].mrt == null ? (mrt = "") : (mrt = data.data[i].mrt);
@@ -68,10 +75,8 @@ async function renderAttraction(page = 0, keyword = "") {
       data.data[i].id
     );
   }
-
   let allAttraction = document.querySelectorAll("div.attraction__box");
   allAttraction.forEach((attraction) => {
-    // attraction.addEventListener("click", redirect2Attraction);
     attraction.addEventListener("click", (e) => {
       let attractionID = e.target.id;
       window.location.href = "/attraction/" + attractionID;
@@ -113,11 +118,11 @@ async function searchKeywordByMRT() {
   await renderMrts();
   let mrts = document.querySelectorAll("div.mrt");
   mrts.forEach((mrt) => {
-    mrt.addEventListener("click", (e) => {
+    mrt.addEventListener("click", async (e) => {
       keyword = mrt.innerHTML;
       attractionSection.innerHTML = "";
-      renderAttraction(0, keyword);
-      input = document.querySelector("input#attraction");
+      await renderAttraction(0, keyword); // 修正：加上 await
+      let input = document.querySelector("input#attraction");
       input.value = keyword;
     });
   });
