@@ -76,6 +76,7 @@ func InitDB() error {
 
 	// 自動建表
 	models.Migrate(Database)
+	Database.AutoMigrate(&models.Order{})
 
 	return nil
 }

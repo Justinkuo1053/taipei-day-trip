@@ -22,6 +22,7 @@ func RegisterRoutes(r *gin.Engine, attractionHandler *AttractionHandler, booking
 	r.DELETE("/api/booking/:id", bookingHandler.DeleteBooking)
 
 	r.POST("/api/orders", orderHandler.CreateOrder)
+	r.GET("/api/order/:orderNumber", orderHandler.GetOrder)
 
 	r.Use(AuthMiddleware(userService))
 	r.POST("/api/user", userHandler.Register)

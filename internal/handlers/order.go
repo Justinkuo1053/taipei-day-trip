@@ -48,3 +48,45 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		},
 	})
 }
+
+func (h *OrderHandler) GetOrder(c *gin.Context) {
+	orderNumber := c.Param("orderNumber")
+	order, err := h.Service.GetOrder(orderNumber)
+	if err != nil {
+		c.JSON(http.StatusOK, models.OrderDetailResponse{
+			Error:   true,
+			Message: "查無此訂單",
+		})
+		return
+	}
+	// 組裝回傳格式
+	resp := models.OrderDetailResponse{
+		Data: &struct {
+			Number  string             `json:"number"`
+			Price   int                `json:"price"`
+			Trip    models.TripInfo    `json:"trip"`
+			Contact models.ContactInfo `json:"contact"`
+			Status  int                `json:"status"`
+		}{
+			Number: order.OrderNumber,
+			Price:  order.Price,
+			Trip: models.TripInfo{
+				Attraction: models.AttractionInfo{
+					ID:      order.Attraction.ID,
+					Name:    order.Attraction.Name,
+					Address: order.Attraction.Address,
+					Image:   order.Attraction.Image,
+				},
+				Date: order.TripDate,
+				Time: order.TripTime,
+			},
+			Contact: models.ContactInfo{
+				Name:  order.ContactName,
+				Email: order.ContactEmail,
+				Phone: order.ContactPhone,
+			},
+			Status: order.Status,
+		},
+	}
+	c.JSON(http.StatusOK, resp)
+}
