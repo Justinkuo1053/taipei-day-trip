@@ -73,3 +73,8 @@ type OrderDetailResponse struct {
 	Error   bool   `json:"error,omitempty"`
 	Message string `json:"message,omitempty"`
 }
+
+type PaymentInput struct {
+	Prime  string `json:"prime"`
+	Amount int    `json:"amount"`
+}
