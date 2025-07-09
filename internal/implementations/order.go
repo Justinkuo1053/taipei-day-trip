@@ -15,12 +15,6 @@ func NewOrderServiceImpl() interfaces.OrderService {
 	return &OrderServiceImpl{}
 }
 
-// GetOrder implements interfaces.OrderService.
-func (s *OrderServiceImpl) GetOrder(orderNumber string) (*models.Order, error) {
-	// TODO: implement actual logic
-	return nil, fmt.Errorf("not implemented")
-}
-
 func (s *OrderServiceImpl) CreateOrder(order models.OrderInput) (string, error) {
 	if order.Prime != "test_prime" {
 		return "", fmt.Errorf("付款失敗（mock）")
@@ -54,7 +48,15 @@ func (s *OrderServiceImpl) CreateOrder(order models.OrderInput) (string, error) 
 	return orderNumber, nil
 }
 
+func (s *OrderServiceImpl) GetOrder(orderNumber string) (*models.Order, error) {
+	var order models.Order
+	err := utils.Database.Preload("Attraction").Where("order_number = ?", orderNumber).First(&order).Error
+	if err != nil {
+		return nil, err
+	}
+	return &order, nil
+}
+
 func (s *OrderServiceImpl) ProcessPayment(orderNumber string, paymentData models.PaymentInput) error {
-	// TODO: implement payment logic if needed
 	return nil
 }
