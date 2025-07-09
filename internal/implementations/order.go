@@ -1,22 +1,13 @@
 package implementations
 
-
-import "taipei-day-trip-go-go/internal/interfaces"
-
-// import (
-// 	"errors"
-// 	"taipei-day-trip-go-go/internal/interfaces"
-// 	"taipei-day-trip-go-go/internal/models"
-// 	"taipei-day-trip-go-go/internal/utils"
-// )
-=======
 import (
 	"fmt"
+	"math/rand"
 	"taipei-day-trip-go-go/internal/interfaces"
 	"taipei-day-trip-go-go/internal/models"
 	"taipei-day-trip-go-go/internal/utils"
+	"time"
 )
->>>>>>> Stashed changes
 
 type OrderServiceImpl struct{}
 
@@ -24,16 +15,31 @@ func NewOrderServiceImpl() interfaces.OrderService {
 	return &OrderServiceImpl{}
 }
 
+// GetOrder implements interfaces.OrderService.
+func (s *OrderServiceImpl) GetOrder(orderNumber string) (*models.Order, error) {
+	// TODO: implement actual logic
+	return nil, fmt.Errorf("not implemented")
+}
+
 func (s *OrderServiceImpl) CreateOrder(order models.OrderInput) (string, error) {
 	if order.Prime != "test_prime" {
 		return "", fmt.Errorf("付款失敗（mock）")
 	}
-	orderNumber := fmt.Sprintf("20250708%06d", 123456) // 可改為動態產生
+	userID := uint(1)    // TODO: 之後從 session 或 token 取得
+	bookingID := uint(1) // TODO: 之後根據實際 booking 流程取得
+	// 防止同一 user、同一 booking 重複下訂
+	var existOrder models.Order
+	err := utils.Database.Where("user_id = ? AND booking_id = ?", userID, bookingID).First(&existOrder).Error
+	if err == nil {
+		return "", fmt.Errorf("此預約已建立訂單，請勿重複下訂")
+	}
+	rand.Seed(time.Now().UnixNano())
+	orderNumber := fmt.Sprintf("%s%06d", time.Now().Format("20060102150405"), rand.Intn(1000000))
 	orderModel := models.Order{
 		OrderNumber:  orderNumber,
-		UserID:       1, // TODO: 之後從 session 或 token 取得
-		BookingID:    1, // TODO: 之後根據實際 booking 流程取得
-		AttractionID: order.Order.Trip.Attraction.ID,
+		UserID:       userID,
+		BookingID:    bookingID,
+		AttractionID: uint(order.Order.Trip.Attraction.ID),
 		Price:        order.Order.Price,
 		TripDate:     order.Order.Trip.Date,
 		TripTime:     order.Order.Trip.Time,
@@ -48,15 +54,7 @@ func (s *OrderServiceImpl) CreateOrder(order models.OrderInput) (string, error) 
 	return orderNumber, nil
 }
 
-func (s *OrderServiceImpl) GetOrder(orderNumber string) (*models.Order, error) {
-	var order models.Order
-	err := utils.Database.Preload("Attraction").Where("order_number = ?", orderNumber).First(&order).Error
-	if err != nil {
-		return nil, err
-	}
-	return &order, nil
-}
-
 func (s *OrderServiceImpl) ProcessPayment(orderNumber string, paymentData models.PaymentInput) error {
+	// TODO: implement payment logic if needed
 	return nil
 }

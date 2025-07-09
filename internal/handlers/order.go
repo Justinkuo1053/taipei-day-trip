@@ -72,10 +72,10 @@ func (h *OrderHandler) GetOrder(c *gin.Context) {
 			Price:  order.Price,
 			Trip: models.TripInfo{
 				Attraction: models.AttractionInfo{
-					ID:      order.Attraction.ID,
+					ID:      int(order.Attraction.ID),
 					Name:    order.Attraction.Name,
 					Address: order.Attraction.Address,
-					Image:   order.Attraction.Image,
+					Image:   "", // Attraction 沒有 Image 欄位，先給空字串或可自訂
 				},
 				Date: order.TripDate,
 				Time: order.TripTime,

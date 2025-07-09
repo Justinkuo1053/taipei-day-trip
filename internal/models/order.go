@@ -4,10 +4,10 @@ import "time"
 
 type Order struct {
 	ID           uint      `json:"id" gorm:"primaryKey"`
-	OrderNumber  string    `json:"number" gorm:"column:order_number;size:50;unique;not null"`
+	OrderNumber  string    `json:"number" gorm:"size:50;unique;not null"`
 	UserID       uint      `json:"user_id" gorm:"not null"`
 	BookingID    uint      `json:"booking_id" gorm:"not null"`
-	AttractionID int       `json:"attraction_id" gorm:"not null"`
+	AttractionID uint      `json:"attraction_id" gorm:"not null"`
 	Price        int       `json:"price" gorm:"not null"`
 	TripDate     string    `json:"date" gorm:"size:20;not null"`
 	TripTime     string    `json:"time" gorm:"size:20;not null"`
@@ -18,9 +18,9 @@ type Order struct {
 	CreatedAt    time.Time `json:"created_at" gorm:"autoCreateTime"`
 	UpdatedAt    time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 
-	User       User           `json:"user" gorm:"foreignKey:UserID"`
-	Booking    Booking        `json:"booking" gorm:"foreignKey:BookingID"`
-	Attraction AttractionInfo `json:"attraction" gorm:"foreignKey:AttractionID;references:ID"`
+	User       User       `json:"user" gorm:"foreignKey:UserID"`
+	Booking    Booking    `json:"booking" gorm:"foreignKey:BookingID"`
+	Attraction Attraction `json:"attraction" gorm:"foreignKey:AttractionID;references:ID"`
 }
 
 type AttractionInfo struct {
