@@ -25,8 +25,9 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		})
 		return
 	}
-
-	orderNumber, err := h.Service.CreateOrder(input)
+	// TODO: 從 JWT 或 session 取得 userID，這裡暫時寫死 1
+	userID := uint(1)
+	orderNumber, err := h.Service.CreateOrder(input, userID)
 	if err != nil {
 		c.JSON(http.StatusOK, models.OrderCreateResponse{
 			Error:   true,
@@ -34,7 +35,6 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		})
 		return
 	}
-
 	c.JSON(http.StatusOK, models.OrderCreateResponse{
 		Data: &struct {
 			Number  string               `json:"number"`
