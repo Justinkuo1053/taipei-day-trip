@@ -17,9 +17,10 @@ type Attraction struct {
 }
 
 type Image struct {
-	ID           uint   `gorm:"primaryKey"`
-	URL          string `gorm:"size:512"`
-	AttractionID uint
+	ID           uint       `gorm:"primaryKey"`
+	URL          string     `gorm:"size:512"`
+	AttractionID uint       // 外鍵
+	Attraction   Attraction `gorm:"foreignKey:AttractionID"` // 明確指定外鍵
 }
 
 func Migrate(db *gorm.DB) {

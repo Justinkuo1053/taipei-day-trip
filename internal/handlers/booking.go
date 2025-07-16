@@ -28,13 +28,17 @@ func (h *BookingHandler) GetBooking(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": nil})
 		return
 	}
+
+	// 強制指定一張圖片網址（可換成你想要的網址）
+	imageURL := "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
+
 	c.JSON(http.StatusOK, gin.H{
 		"data": gin.H{
 			"attraction": gin.H{
-				"id":      booking.Attraction.ID,
-				"name":    booking.Attraction.Name,
-				"address": booking.Attraction.Address,
-				"image":   "https://yourdomain.com/images/attraction/" + strconv.Itoa(int(booking.Attraction.ID)) + ".jpg", // TODO: 實際圖片
+				"id":      1,
+				"name":    "測試景點",
+				"address": "台北市信義區",
+				"image":   imageURL,
 			},
 			"date":  booking.Date.Format("2006-01-02"),
 			"time":  booking.Time,
