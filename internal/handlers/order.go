@@ -1,22 +1,45 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"taipei-day-trip-go-go/internal/interfaces"
 	"taipei-day-trip-go-go/internal/models"
+	"taipei-day-trip-go-go/internal/services"
 
 	"github.com/gin-gonic/gin"
 )
 
 type OrderHandler struct {
-	Service interfaces.OrderService
+	Service        interfaces.OrderService
+	BookingService *services.BookingService
 }
 
-func NewOrderHandler(service interfaces.OrderService) *OrderHandler {
-	return &OrderHandler{Service: service}
+func NewOrderHandler(service interfaces.OrderService, bookingService *services.BookingService) *OrderHandler {
+	return &OrderHandler{Service: service, BookingService: bookingService}
 }
 
 func (h *OrderHandler) CreateOrder(c *gin.Context) {
+	// 取得 userID
+	userObj, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, models.OrderCreateResponse{
+			Error:   true,
+			Message: "未登入或無法取得使用者資訊",
+		})
+		return
+	}
+	user, ok := userObj.(*models.User)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, models.OrderCreateResponse{
+			Error:   true,
+			Message: "使用者資訊格式錯誤",
+		})
+		return
+	}
+	userID := user.ID
+
+	// 解析訂單資料
 	var input models.OrderInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, models.OrderCreateResponse{
@@ -25,11 +48,29 @@ func (h *OrderHandler) CreateOrder(c *gin.Context) {
 		})
 		return
 	}
-	// TODO: 從 JWT 或 session 取得 userID，這裡暫時寫死 1
-	userID := uint(1)
+	if input.Prime == "" {
+		c.JSON(http.StatusBadRequest, models.OrderCreateResponse{
+			Error:   true,
+			Message: "缺少 prime 或格式錯誤",
+		})
+		return
+	}
+	fmt.Println("收到 prime:", input.Prime)
+
+	// 查詢該 user 的 booking，取得 bookingID
+	booking, err := h.BookingService.GetBookingByUserID(userID)
+	if err != nil || booking == nil {
+		c.JSON(http.StatusBadRequest, models.OrderCreateResponse{
+			Error:   true,
+			Message: "找不到對應預定行程，請先預定行程",
+		})
+		return
+	}
+
+	// 呼叫 Service 建立訂單
 	orderNumber, err := h.Service.CreateOrder(input, userID)
 	if err != nil {
-		c.JSON(http.StatusOK, models.OrderCreateResponse{
+		c.JSON(http.StatusInternalServerError, models.OrderCreateResponse{
 			Error:   true,
 			Message: err.Error(),
 		})

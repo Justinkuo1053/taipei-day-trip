@@ -11,7 +11,9 @@ import (
 func RegisterRoutes(r *gin.Engine, attractionHandler *AttractionHandler, bookingHandler *BookingHandler, userHandler *UserHandler, userService *services.UserService) {
 	orderRepo := repositories.NewOrderRepositoryImpl()
 	orderService := services.NewOrderServiceImpl(orderRepo)
-	orderHandler := NewOrderHandler(orderService)
+	// 取得 bookingService
+	// bookingHandler 已經有 BookingService 欄位
+	orderHandler := NewOrderHandler(orderService, bookingHandler.BookingService)
 
 	r.GET("/api/attractions", attractionHandler.GetAttractions)
 	r.GET("/api/mrts", attractionHandler.GetMRTs)

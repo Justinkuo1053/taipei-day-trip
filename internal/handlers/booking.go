@@ -21,24 +21,40 @@ func NewBookingHandler(bookingService *services.BookingService) *BookingHandler 
 
 // 取得目前預定行程
 func (h *BookingHandler) GetBooking(c *gin.Context) {
-	// TODO: 取得 userID，這裡先寫死 1
-	userID := uint(1)
+	// 取得 userID，從 JWT middleware 取得
+	userObj, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"data": nil, "error": true, "message": "未登入或無法取得使用者資訊"})
+		return
+	}
+	user, ok := userObj.(*models.User)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"data": nil, "error": true, "message": "使用者資訊格式錯誤"})
+		return
+	}
+	userID := user.ID
+
 	booking, err := h.BookingService.GetBookingByUserID(userID)
 	if err != nil || booking == nil {
 		c.JSON(http.StatusOK, gin.H{"data": nil})
 		return
 	}
 
-	// 強制指定一張圖片網址（可換成你想要的網址）
-	imageURL := "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
-
+	// 回傳 booking 與景點資料（從 booking.Attraction 取得）
+	attr := booking.Attraction
+	imageUrl := ""
+	if len(attr.Images) > 1 {
+		imageUrl = attr.Images[1]
+	} else if len(attr.Images) > 0 {
+		imageUrl = attr.Images[0]
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"data": gin.H{
 			"attraction": gin.H{
-				"id":      1,
-				"name":    "測試景點",
-				"address": "台北市信義區",
-				"image":   imageURL,
+				"id":      attr.ID,
+				"name":    attr.Name,
+				"address": attr.Address,
+				"image":   imageUrl,
 			},
 			"date":  booking.Date.Format("2006-01-02"),
 			"time":  booking.Time,
@@ -64,7 +80,18 @@ func (h *BookingHandler) CreateBooking(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": true, "message": "日期格式錯誤"})
 		return
 	}
-	userID := uint(1) // TODO: 取得 userID
+	// 取得 userID，從 JWT middleware 取得
+	userObj, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": true, "message": "未登入或無法取得使用者資訊"})
+		return
+	}
+	user, ok := userObj.(*models.User)
+	if !ok {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": true, "message": "使用者資訊格式錯誤"})
+		return
+	}
+	userID := user.ID
 	booking := &models.Booking{
 		UserID:       userID,
 		AttractionID: req.AttractionID,

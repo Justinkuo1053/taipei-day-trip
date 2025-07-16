@@ -17,8 +17,8 @@ func NewOrderServiceImpl(orderRepo interfaces.OrderRepository) interfaces.OrderS
 }
 
 func (s *OrderServiceImpl) GetOrder(orderNumber string) (*models.Order, error) {
-	// TODO: implement actual logic
-	return nil, fmt.Errorf("not implemented")
+	// 呼叫 repository 查詢訂單（含景點與圖片）
+	return s.orderRepo.GetOrderByNumber(orderNumber)
 }
 
 func (s *OrderServiceImpl) CreateOrder(order models.OrderInput, userID uint) (string, error) {
