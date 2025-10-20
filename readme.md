@@ -4,7 +4,7 @@
 
 ## 線上網址
 
-🌐 **網站連結**：[http://3.84.68.212:8080/](https://d39orccayvka7l.cloudfront.net/)
+🌐 **網站連結**：https://d39orccayvka7l.cloudfront.net/
 
 ## 特色功能
 
