@@ -1,3 +1,4 @@
+// Updated on 2026-03-18
 // filepath: taipei-day-trip-go-go/internal/handlers/routes.go
 package handlers
 

@@ -1,3 +1,5 @@
+// Updated on 2026-03-18
+
 module taipei-day-trip-go-go
 
 go 1.23.6
